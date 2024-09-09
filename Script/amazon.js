@@ -1,9 +1,10 @@
+import { cart, addToCart } from "../data/cart.js";
+import { products } from "../data/products.js";
 
+let productHtml = "";
 
-let productHtml='';
-
-products.forEach((product)=>{
- productHtml += `<div class="product-container">
+products.forEach((product) => {
+  productHtml += `<div class="product-container">
           <div class="product-image-container">
             <img class="product-image"
               src="${product.image}">
@@ -15,7 +16,7 @@ products.forEach((product)=>{
     
           <div class="product-rating-container">
             <img class="product-rating-stars"
-              src="images/ratings/rating-${product.rating.stars*10}.png">
+              src="images/ratings/rating-${product.rating.stars * 10}.png">
             <div class="product-rating-count link-primary">
              ${product.rating.count}
             </div>
@@ -47,40 +48,32 @@ products.forEach((product)=>{
             Added
           </div>
     
-          <button class="add-to-cart-button button-primary js-add-to-cart-button " data-product-id="${product.id}">
+          <button class="add-to-cart-button button-primary js-add-to-cart-button " data-product-id="${
+            product.id
+          }">
             Add to Cart
           </button>
-        </div>`
-        
+        </div>`;
 });
 // diplay on the web page
-document.querySelector('.js-products-grid').innerHTML=productHtml;
+document.querySelector(".js-products-grid").innerHTML = productHtml;
+
+function updateQuantity() {
+  let cartQuantity = 0;
+  cart.forEach((item) => {
+    cartQuantity += item.Quantity;
+  });
+  document.querySelector(".js-add-to-cart-quantity").innerHTML = cartQuantity;
+}
+
 // querySelectorAll()   means every button display on the web page
-document.querySelectorAll('.js-add-to-cart-button').forEach((button)=>{
-  button.addEventListener('click',()=>{
+document.querySelectorAll(".js-add-to-cart-button").forEach((button) => {
+  button.addEventListener("click", () => {
     const productId = button.dataset.productId;
 
-    let matchingItem;
-    cart.forEach((item)=>{
-      if(productId==item.productId){
-        matchingItem = item;
-      }
-    })
-
-    if(matchingItem){
-      matchingItem.Quantity+=1
-    }else{
-      cart.push(
-        {
-          productId : productId,
-          Quantity : 1
-        }
-       )
-    }
-     let cartQuantity = 0;
-     cart.forEach((item)=>{
-      cartQuantity += item.Quantity;
-     });
-     document.querySelector('.js-add-to-cart-quantity').innerHTML=cartQuantity;
-   })
-})
+    // this function created in the cart folder
+    addToCart(productId);
+    // function call
+    updateQuantity();
+  });
+});
