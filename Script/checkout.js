@@ -1,5 +1,6 @@
 import { cart,removeFromCart } from "../data/cart.js";
 import { products } from "../data/products.js";
+const today = dayjs();
 let cartSummaryHTML='';
 
 cart.forEach((cartItem) => {
